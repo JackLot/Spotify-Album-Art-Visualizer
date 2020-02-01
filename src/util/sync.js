@@ -9,24 +9,24 @@ import { pause } from '../util/timing'
 
 /**
  * @class Sync
- * 
+ *
  * Creates an interface for analyzing a playing Spotify track in real time.
- * Exposes event hooks for reacting to changes in intervals. 
+ * Exposes event hooks for reacting to changes in intervals.
  */
 export default class Sync {
   constructor ({
     volumeSmoothing = 100,
     volumeAverage = 200,
-    pingDelay = 2500,
+    pingDelay = 5000,
     fixed = false,
     staticIntervalBaseDuration = 2000,
     $store = null
   } = {}) {
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     const accessToken = cookies.get(ACCESS_TOKEN)
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     const refreshToken = cookies.get(REFRESH_TOKEN)
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     const refreshCode = cookies.get(REFRESH_CODE)
 
     if ($store) {
@@ -106,7 +106,7 @@ export default class Sync {
   }
 
   /**
-   * @method initHooks - Initialize interval event hooks. 
+   * @method initHooks - Initialize interval event hooks.
    */
   initHooks () {
     this.hooks = {
@@ -121,11 +121,11 @@ export default class Sync {
       this.hooks.tatum.forEach(h => h(t))
     })
 
-    this.state.activeIntervals.watch('segments', s => { 
+    this.state.activeIntervals.watch('segments', s => {
       this.hooks.segment.forEach(h => h(s))
     })
 
-    this.state.activeIntervals.watch('beats', b => { 
+    this.state.activeIntervals.watch('beats', b => {
       this.hooks.beat.forEach(h => h(b))
     })
 
@@ -139,20 +139,20 @@ export default class Sync {
   }
 
   /**
-   * @method ping - Ask Spotify for currently playing track, after a specified delay. 
+   * @method ping - Ask Spotify for currently playing track, after a specified delay.
    */
   ping () {
     setTimeout(() => this.getCurrentlyPlaying(), this.state.api.pingDelay)
   }
 
   /**
-   * @method getNewToken - Retrieve new access token from server. 
+   * @method getNewToken - Retrieve new access token from server.
    */
   async getNewToken () {
     try {
-      // eslint-disable-next-line 
+      // eslint-disable-next-line
       const { data } = await get(`${PROJECT_ROOT}/refresh?token=${this.state.api.tokens.refreshToken}`)
-      // eslint-disable-next-line 
+      // eslint-disable-next-line
       cookies.set(SPOTIFY_ACCESS_TOKEN, data.access_token)
       this.state.api.tokens.accessToken = data.access_token
       this.state.api.headers = {
@@ -179,7 +179,7 @@ export default class Sync {
   async getCurrentlyPlaying () {
     try {
       const { data } = await get(this.state.api.currentlyPlaying, { headers: this.state.api.headers })
-      
+
       if (!data || !data.is_playing || !data.item) {
         if (this.state.active === true) {
           this.state.active = false
@@ -197,7 +197,7 @@ export default class Sync {
       if (this.state.initialized === false || !songsInSync || this.state.active === false) {
         return this.getTrackInfo(data)
       }
-  
+
       this.ping()
     } catch ({ status }) {
       if (status === 401) {
@@ -215,10 +215,10 @@ export default class Sync {
       auth()
     }
   }
-  
+
   /**
    * @method getTrackInfo - Fetch track analysis and track features of currently playing track.
-   * @param {object} data - Response from Spotify API. 
+   * @param {object} data - Response from Spotify API.
    */
   async getTrackInfo (data) {
     this.state.loadingNextSong = true
@@ -254,7 +254,7 @@ export default class Sync {
     this.state.initialStart = window.performance.now()
     this.state.loadingNextSong = false
     this.resetVolumeQueues()
-    
+
     if (this.state.initialized === false) {
       requestAnimationFrame(this.tick.bind(this))
       this.state.initialized = true
@@ -283,7 +283,7 @@ export default class Sync {
         if (analysis[i].start < progress && progress < analysis[i + 1].start) return i
       }
     }
-  
+
     this.state.intervalTypes.forEach(type => {
       const index = determineInterval(type)
       if (index !== this.state.activeIntervals[type].index) {
@@ -298,7 +298,7 @@ export default class Sync {
   }
 
   /**
-   * @method getVolume - Extract volume data from active segment. 
+   * @method getVolume - Extract volume data from active segment.
    */
   getVolume (interval = this.state.activeIntervals.segments) {
     const {
@@ -312,10 +312,10 @@ export default class Sync {
     } = interval
 
     if (!this.state.trackAnalysis.segments[index + 1]) return 0
-    
+
     const next = this.state.trackAnalysis.segments[index + 1].loudness_start
     const current = start + elapsed
-  
+
     if (elapsed < loudness_max_time) {
       const progress = Math.max(Math.min(1, elapsed / loudness_max_time), 0)
       return interpolateNumber(loudness_start, loudness_max)(progress)
@@ -330,8 +330,8 @@ export default class Sync {
 
   /**
    * @method watch - Convenience method for watching data store.
-   * @param {string} key 
-   * @param {function} method 
+   * @param {string} key
+   * @param {function} method
    */
   watch (key, method) {
     this.state.watch(key, method)
@@ -339,15 +339,15 @@ export default class Sync {
 
   /**
    * @method on - Convenience method for applying interval hooks.
-   * @param {string} - Interval type. 
-   * @param {function} - Event handler. 
+   * @param {string} - Interval type.
+   * @param {function} - Event handler.
    */
   on (interval, method) {
     this.hooks[interval].push(method)
   }
 
   /**
-   * @getter isActive - Returns if class is actively syncing with a playing track. 
+   * @getter isActive - Returns if class is actively syncing with a playing track.
    */
   get isActive () {
     return this.state.active === true
@@ -360,7 +360,7 @@ export default class Sync {
   get segment () {
     return this.state.activeIntervals.segments
   }
-  
+
   get beat () {
     return this.state.activeIntervals.beats
   }
@@ -434,8 +434,8 @@ export default class Sync {
   }
 
   /**
-   * @method tick - A single update tick from the Sync loop. 
-   * @param {DOMHighResTimeStamp} now 
+   * @method tick - A single update tick from the Sync loop.
+   * @param {DOMHighResTimeStamp} now
    */
   tick (now) {
     requestAnimationFrame(this.tick.bind(this))
@@ -455,19 +455,19 @@ export default class Sync {
     }
 
     const types = ['tatums', 'segments', 'beats', 'bars', 'sections']
-  
+
     types.forEach(type => {
       analysis[type] = []
-  
+
       for (var i = 0; i < 10000; i++) {
         const tatumStart = analysis.tatums[i - 1]
           ? Math.round(analysis.tatums[i - 1].start + analysis.tatums[i - 1].duration)
           : 0
-          
+
         const tatumDuration = (i % 2 === 0)
           ? Math.round(duration.tatums[0])
           : Math.round(duration.tatums[1])
-        
+
         analysis[type].push({
           start: (type === 'tatums')
             ? tatumStart
@@ -488,9 +488,9 @@ export default class Sync {
 
 export async function auth () {
   try {
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     const { data } = await get(`${PROJECT_ROOT}/auth`)
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     window.location.href = `${PROJECT_ROOT}/login?auth_id=${data.auth_id}`
   } catch (e) {
     // eslint-disable-next-line

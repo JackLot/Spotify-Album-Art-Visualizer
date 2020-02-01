@@ -10,7 +10,7 @@ div.home(:class="{ hide, show }")
       span(data-letter="6") d
       span(data-letter="7") o
       span(data-letter="8") s
-      span(data-letter="9" ref="animate") y  
+      span(data-letter="9" ref="animate") y
       span(data-letter="10") n
       span(data-letter="11") c
     div.text
@@ -44,7 +44,7 @@ export default {
         this.$store.dispatch('login')
       })
     },
-    
+
     init () {
       this.show = true
       if (this.$ga) {
@@ -67,6 +67,10 @@ export default {
 <style lang="scss" scoped>
 $splash-hide-duration: 1000ms;
 
+body {
+  background-color: black;
+}
+
 .home {
   @include position(fixed, 0 0 0 0);
   @include flex;
@@ -84,7 +88,7 @@ h1 {
   font-family: 'Gochi Hand', cursive;
   font-weight: 400;
   letter-spacing: -.1em;
-  
+
   span { display: inline-block; }
 }
 

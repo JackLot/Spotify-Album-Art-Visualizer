@@ -53,7 +53,7 @@ button {
   padding: 30px;
   border: 0;
   outline: 0;
-  
+
   &:hover { outline: 0; }
 
   @include max-width(header) {

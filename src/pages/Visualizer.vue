@@ -8,8 +8,6 @@
     Spinner(v-if="spinnerVisible")
   transition(name="fadey")
     Toast(v-if="toast.visible")
-  transition(name="fadeyn")
-    TrailsGUI(v-if="selectedVisualizer === 'trails' && hover && !menuVisible")
 </template>
 
 <script>
@@ -59,7 +57,7 @@ export default {
 
       this.multiviz.sync.state.watch('currentlyPlaying', val => {
         this.$store.commit(SET_CURRENTLY_PLAYING, val)
-      }) 
+      })
 
       this.multiviz.sync.state.watch('noPlayback', val => {
         if (val === true) {
@@ -67,7 +65,7 @@ export default {
           this.$store.dispatch('toast', {
             message: 'No playback detected',
             autoHide: false
-          })  
+          })
           this.$store.commit(SET_HIDE_ALL, false)
         } else {
           this.$store.commit(SET_TOAST_VISIBLE, false)
@@ -80,11 +78,11 @@ export default {
       const isMobile = (window.innerWidth * window.innerHeight) <= MAX_PIXELS
 
       this.multiviz.selectedVisualizer = val
-    
-      if (val === 'trails') { 
+
+      if (val === 'trails') {
         this.multiviz.sketch.setSize(isMobile)
       }
-      
+
       if (val === 'kaleidosync') {
         this.multiviz.sketch.setSize(isMobile)
       }
@@ -104,7 +102,7 @@ export default {
 
       if (canvas) {
         canvas.remove()
-      } 
+      }
 
       this.multiviz = new MultiViz(this.$store)
 
@@ -131,6 +129,7 @@ export default {
         })
       }
     } catch (e) {
+      // eslint-disable-next-line
       console.log(e)
     }
   },
@@ -145,10 +144,13 @@ export default {
 }
 </script>
 
-<style lang="scss">     
-canvas {
-  @include position(fixed, 0 null null 0);
-  @include size(100%);
-  z-index: 0;
-}   
-</style> 
+<style lang="scss">
+body {
+  background-color: black;
+}
+// canvas {
+//   @include position(fixed, 0 null null 0);
+//   @include size(100%);
+//   z-index: 0;
+// }
+</style>

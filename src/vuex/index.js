@@ -21,10 +21,10 @@ const { plugin } = new VuexPersistence({
 
 export default new Vuex.Store({
   state: {
-    alwaysShowAlbumArt: false,
-    alwaysShowTrackInfo: false,
-    albumArtVisible: false,
-    trackInfoVisible: false,
+    alwaysShowAlbumArt: true,
+    alwaysShowTrackInfo: true,
+    albumArtVisible: true,
+    trackInfoVisible: true,
     hideAll: false,
     trackProgress: {
       progress: 0,
@@ -40,11 +40,11 @@ export default new Vuex.Store({
     settingsVisible: false,
     hover: false,
     spinnerVisible: false,
-    slowerSpeed: false, 
+    slowerSpeed: false,
     color: 'rgba(0,0,0,.5)',
     colorScheme: {},
     currentlyPlaying: {},
-    selectedVisualizer: 'trails',
+    selectedVisualizer: 'blobs',
     toast: {
       visible: false,
       message: '',
