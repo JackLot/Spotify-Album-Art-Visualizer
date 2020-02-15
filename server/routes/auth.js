@@ -3,7 +3,7 @@ module.exports = app => {
 
   app.get('/auth', (req, res) => {
     let auth_id = auth()
-  
+
     res.setHeader('Content-Type', 'application/json')
     res.send(JSON.stringify({ auth_id }))
   })

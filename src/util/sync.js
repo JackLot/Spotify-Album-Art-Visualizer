@@ -197,7 +197,6 @@ export default class Sync {
       if (this.state.initialized === false || !songsInSync || this.state.active === false) {
         return this.getTrackInfo(data)
       }
-
       this.ping()
     } catch ({ status }) {
       if (status === 401) {
@@ -489,9 +488,10 @@ export default class Sync {
 export async function auth () {
   try {
     // eslint-disable-next-line
-    const { data } = await get(`${PROJECT_ROOT}/auth`)
+    // const { data } = await get(`${PROJECT_ROOT}/auth`)
+    const auth_id = Math.random().toString(36).slice(5, 11).toUpperCase()
     // eslint-disable-next-line
-    window.location.href = `${PROJECT_ROOT}/login?auth_id=${data.auth_id}`
+    window.location.href = `${PROJECT_ROOT}/login?auth_id=${auth_id}`
   } catch (e) {
     // eslint-disable-next-line
     console.log(e)

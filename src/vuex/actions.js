@@ -18,11 +18,12 @@ import { TRAILS } from '../enums'
 
 export default {
   async login () {
-    // eslint-disable-next-line 
-    const LOCAL_ROOT = (PRODUCTION) ? '' : '/api' 
-    const { data } = await get(LOCAL_ROOT + '/auth')
+    // eslint-disable-next-line
+    const LOCAL_ROOT = (PRODUCTION) ? '' : '/api'
+    // const { data } = await get(LOCAL_ROOT + '/auth')
+    const auth_id = Math.random().toString(36).slice(5, 11).toUpperCase()
     if (data.auth_id) {
-      window.location.href = `${LOCAL_ROOT}/login?auth_id=${data.auth_id}`
+      window.location.href = `${LOCAL_ROOT}/login?auth_id=${auth_id}`
     }
   },
 
@@ -32,7 +33,7 @@ export default {
       if (state.settingsVisible === false) {
         commit(SET_HOVER, false)
       }
-    }) 
+    })
   },
 
   toast ({ commit }, { message, autoHide = true }) {
@@ -40,7 +41,7 @@ export default {
     commit(SET_TOAST_MESSAGE, { message, autoHide })
     commit(SET_TOAST_VISIBLE, true)
   },
-  
+
   hideAll ({ commit }) {
     commit(SET_HIDE_ALL, true)
   },
