@@ -20,10 +20,9 @@ export default {
   async login () {
     // eslint-disable-next-line
     const LOCAL_ROOT = (PRODUCTION) ? '' : '/api'
-    // const { data } = await get(LOCAL_ROOT + '/auth')
-    const auth_id = Math.random().toString(36).slice(5, 11).toUpperCase()
+    const { data } = await get(LOCAL_ROOT + '/auth')
     if (data.auth_id) {
-      window.location.href = `${LOCAL_ROOT}/login?auth_id=${auth_id}`
+      window.location.href = `${LOCAL_ROOT}/login?auth_id=${data.auth_id}`
     }
   },
 
