@@ -151,7 +151,7 @@ export default class Sync {
   async getNewToken () {
     try {
       // eslint-disable-next-line
-      const { data } = await get(`${PROJECT_ROOT}/refresh?token=${this.state.api.tokens.refreshToken}`)
+      const { data } = await get(`${API_ROOT}/refresh?token=${this.state.api.tokens.refreshToken}`)
       // eslint-disable-next-line
       cookies.set(SPOTIFY_ACCESS_TOKEN, data.access_token)
       this.state.api.tokens.accessToken = data.access_token
@@ -488,9 +488,9 @@ export default class Sync {
 export async function auth () {
   try {
     // eslint-disable-next-line
-    const { data } = await get(`${PROJECT_ROOT}/auth`)
+    const { data } = await get(`${API_ROOT}/auth`)
     // eslint-disable-next-line
-    window.location.href = `${PROJECT_ROOT}/login?auth_id=${data.auth_id}`
+    window.location.href = `${API_ROOT}/login?auth_id=${data.auth_id}`
   } catch (e) {
     // eslint-disable-next-line
     console.log(e)

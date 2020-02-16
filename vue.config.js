@@ -26,7 +26,8 @@ module.exports = {
         GOOGLE_ANALYTICS: JSON.stringify(process.env.GOOGLE_ANALYTICS),
         PRODUCTION: JSON.stringify(process.env.NODE_ENV === 'production'),
         DEVELOPMENT: JSON.stringify(process.env.NODE_ENV !== 'production'),
-        PROJECT_ROOT: JSON.stringify(process.env.PROJECT_ROOT)
+        PROJECT_ROOT: JSON.stringify(process.env.PROJECT_ROOT),
+        API_ROOT: JSON.stringify(process.env.API_ROOT)
       })
     ]
   },
